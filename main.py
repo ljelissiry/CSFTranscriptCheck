@@ -1,4 +1,5 @@
 import time
+#yo why do we need the time module bro?
 import string
 import random
 from selenium import webdriver
