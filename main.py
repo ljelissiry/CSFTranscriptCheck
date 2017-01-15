@@ -1,5 +1,4 @@
 import time
-#yo why do we need the time module bro?
 import string
 import random
 from selenium import webdriver
@@ -10,9 +9,18 @@ nlocation = "/Users/nolanbonnie/Desktop/Python/chromedriver"
 elocation =
 llocation = 
 
-
-
-driver = webdriver.Chrome(location)
+loc = input("Who is using the code?")
+if loc == "nolan":
+    driver = webdriver.Chrome(nlocation)
+elif loc == "eric":
+    driver = webdriver.Chrome(elocation)
+elif loc == "luke":
+    driver = webdriver.Chrome(llocation)
+else:
+    print("input not recognized")
 
 driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
 
+string = "Student Number: 166762 Grade: 12"
+ID = string.split()[2]
+Grade = string.split()[4]
