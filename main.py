@@ -20,3 +20,7 @@ else:
     print("input not recognized")
 
 driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
+
+string = "Student Number: 166762 Grade: 12"
+ID = string.split()[2]
+Grade = string.split()[4]
