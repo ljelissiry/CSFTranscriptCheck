@@ -22,13 +22,14 @@ else:
 driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
 
 #Input Email--------------------------------------------------
+email = input("Email:   ")
 elem = driver.find_element_by_name('Email')
-elem.send_keys('nrbmee@gmail.com')
+elem.send_keys(email)
 elem.send_keys(Keys.RETURN)
 #Input Password--------------------------------------------------
-time.sleep(.5)
+passw = input("Password:    ")
 elem = driver.find_element_by_name('Passwd')
-elem.send_keys("chase5135")
+elem.send_keys(passw)
 elem.send_keys(Keys.RETURN)
 
 startrow = int(input("What row do you want to start on?"))
