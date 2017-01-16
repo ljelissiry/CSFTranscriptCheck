@@ -20,6 +20,25 @@ else:
     print("input not recognized")
 
 driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
+startrow = int(input("What row do you want to start on?"))
+endrow = int(input("What row do you want to end on?"))
+rnge = endrow - startrow
+
+#String text = driver.findElement(By.id("some id")).getText()
+
+for i in range(rnge):
+    scroll = startrow - 1
+    for v in range(scroll):
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.ARROW_DOWN)
+        actions.perform()
+    actions = ActionChains(driver)
+    actions.key_down(Keys.COMMAND)
+    actions.send_keys(Keys.chord("C"))
+    actions.key_up(Keys.COMMAND)
+    actions.perform()
+    
+        
 
 
 transcript = "NO"
