@@ -21,7 +21,6 @@ elif loc == "csf":
 else:
     print("input not recognized")
 
-
 driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1772866043")
 if loc == "nolan":
 #Input Email--------------------------------------------------
@@ -68,24 +67,31 @@ List3 = List3.split(" ")
 
 ClassList = List1 + List2 + List3
 
-
-startrow = int(input("First Row:"))
+startrow = int(input("First Row: "))
 endrow = int(input("Last Row: "))
 rnge = endrow - startrow
+
+time.sleep(2)
+
+scroll = startrow - 1
+for v in range(scroll):
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.ARROW_DOWN)
+    actions.perform()
+for v in range(3):
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.ARROW_RIGHT)
+    actions.perform()
 
 #String text = driver.findElement(By.id("some id")).get_attribute("attribute")
 
 #Comparing Google Sheets Input with Transcript
-for i in range(rnge):
-    scroll = startrow - 1 + i
-    for v in range(scroll):
-        actions = ActionChains(driver)
-        actions.send_keys(Keys.ARROW_DOWN)
-        actions.perform()
-    for v in range(4):
-        actions = ActionChains(driver)
-        actions.send_keys(Keys.ARROW_RIGHT)
-        actions.perform()
+for r in range(rnge):
+    elem = driver.find_element_by_class_name('cell-input')
+    SheetsFirstName = elem.get_attribute('innerText')[:-1]
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.ARROW_RIGHT)
+    actions.perform()
     elem = driver.find_element_by_class_name('cell-input')
     SheetsLastName = elem.get_attribute('innerText')[:-1]
     actions = ActionChains(driver)
@@ -103,33 +109,40 @@ for i in range(rnge):
         actions.send_keys(Keys.ARROW_RIGHT)
         actions.perform()
     elem = driver.find_element_by_class_name('cell-input')
-    transcriptlink = elem.get_attribute('innerText')
-    driver.get(transcriptlink)
+    transcriptlink = elem.get_attribute('innerText')[:-1]
 
+    driver.execute_script("window.open('" + transcriptlink + "', 'new_window')")
+    driver.switch_to_window(driver.window_handles[1])
+    time.sleep(1)
+    
     transcript = "NO"
+    Classes = []
     reason = ""
 
     elem = driver.find_elements_by_class_name('drive-viewer-paginated-page-reader-block')
-    TranscriptText = []
-    for i in range(len(elem)):
-        text = elem[i]
-        TranscriptText.append(text.get_attribute('innerText'))
-    TranscriptLastName = TranscriptText[-5].split(",")[0]
+    if elem != []:
+        TranscriptText = []
+        for i in range(len(elem)):
+            text = elem[i]
+            TranscriptText.append(text.get_attribute('innerText'))
+        TranscriptLastName = TranscriptText[-5].split(",")[0]
 
-    elem = TranscriptText[1]
-    TranscriptID = int(elem.split(" ")[2])
-    TranscriptGrade = int(elem.split(" ")[4])
+        elem = TranscriptText[1]
+        TranscriptID = int(elem.split(" ")[2])
+        TranscriptGrade = int(elem.split(" ")[4])
 
-    if TranscriptLastName == SheetsLastName:
-        if TranscriptID == SheetsID:
-            if TranscriptGrade == SheetsGrade:
-                transcript = "YES"
+        if TranscriptLastName == SheetsLastName:
+            if TranscriptID == SheetsID:
+                if TranscriptGrade == SheetsGrade:
+                    transcript = "YES"
+                else:
+                    reason = "Grade does not match"
             else:
-                reason = "Grade does not match"
+                reason = "ID does not match"
         else:
-            reason = "ID does not match"
+            reason = "Name does not match"
     else:
-        reason = "Name does not match"
+        reason = "Transcript link is broken"
 
 # locates classes and grades for most recent term from TranscriptText and stores in Classes
     if transcript == "YES":
@@ -143,7 +156,6 @@ for i in range(rnge):
         CurrentTerm = " ".join(TranscriptText[start:end])
         CurrentTerm = CurrentTerm.replace("+","").replace("-","")
         CurrentTerm = CurrentTerm.split(" ")
-        Classes = []
         for i in range(len(CurrentTerm)):
             if CurrentTerm[i] in ClassList:
                 Classes.append(CurrentTerm[i])
@@ -230,18 +242,41 @@ for i in range(rnge):
             reason = "< 10 points from List I, II, & III"
 
 
-    driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1772866043")
-    time.sleep(.5)
-    for v in range(scroll):
-        actions = ActionChains(driver)
-        actions.send_keys(Keys.ARROW_DOWN)
-        actions.perform()
-    for v in range(12):
-        actions = ActionChains(driver)
-        actions.send_keys(Keys.ARROW_RIGHT)
-        actions.perform()
-    #elem = driver.find_element_by_class_name('cell-input')
-    #driver.execute_script("arguments[0].innerText = 'NO')", elem)
+    driver.close()
+    driver.switch_to_window(driver.window_handles[0])
+    ActionChains(driver) \
+        .send_keys(Keys.ARROW_RIGHT) \
+        .perform()
 
-    print(Classes)
-    print(transcript)
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.DELETE,Keys.ENTER)
+    actions.perform()
+    actions = ActionChains(driver)
+    actions.send_keys(transcript)
+    actions.perform()
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.TAB)
+    actions.perform()
+
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.DELETE,Keys.ENTER)
+    actions.perform()
+    actions = ActionChains(driver)
+    actions.send_keys(reason)
+    actions.perform()
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.ENTER)
+    actions.perform()
+
+    for v in range(9):
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.ARROW_LEFT)
+        actions.perform()
+
+    print("\n","Row: ",startrow + r,sep="")
+    print(SheetsFirstName,SheetsLastName)
+    if Classes != []:
+        print(Classes)
+    print("Transcript:",transcript)
+    if reason != "":
+        print("Reason:",reason)
