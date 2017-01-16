@@ -130,4 +130,19 @@ for i in range(rnge):
         CurrentGrades = " ".join(TranscriptText[start:end])
         CurrentGrades = CurrentGrades.replace("+","").replace("-","")
         Classes = CurrentGrades.split(" ")
+        ClassList = ['MACBCP'] #Luke, input all codes here
         print(CurrentGrades)
+        for x in range(len(Classes)):
+            if len(Classes[x]) == 6:
+                for i in range(len(ClassList)):
+                    if ClassList[i] == Classes[x]:
+                        print(ClassList[i], Classes[x], "Match")
+                        for z in range(len(Classes)):
+                            if Classes[z] == "5.0000" or Classes[z] == "4.0000" or Classes[z] == "3.0000" or Classes[z] == "2.0000" or Classes[z] == "1.0000":
+                                Grade = Classes[z - 1]
+                                print(Grade)
+                    else:
+                        print("invalid")
+        
+                        
+
