@@ -32,6 +32,10 @@ for i in range(rnge):
         actions = ActionChains(driver)
         actions.send_keys(Keys.ARROW_DOWN)
         actions.perform()
+    for v in range(5):
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.ARROW_RIGHT)
+        actions.perform()
     actions = ActionChains(driver)
     actions.key_down(Keys.COMMAND)
     actions.send_keys(Keys.chord("C"))
