@@ -21,7 +21,13 @@ else:
 
 driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
 
-string = "Student Number: 166762 Grade: 12"
-ID = int(string.split(" ")[2])
-Grade = int(string.split(" ")[4])
+LastName = "Column E"
+ID = int("Column F")
+Grade = int("Column G")
+
+TranscriptLastName = "Michaud"
+
+stringNumID = "Student Number: 166762 Grade: 12"
+TranscriptID = int(string.split(" ")[2])
+TranscriptGrade = int(string.split(" ")[4])
 
