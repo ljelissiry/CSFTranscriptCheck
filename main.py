@@ -38,7 +38,7 @@ for i in range(rnge):
         actions.perform()
     actions = ActionChains(driver)
     actions.key_down(Keys.COMMAND)
-    actions.send_keys(Keys.chord("C"))
+    actions.send_keys("C")
     actions.key_up(Keys.COMMAND)
     actions.perform()
     
