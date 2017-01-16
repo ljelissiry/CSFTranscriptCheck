@@ -21,6 +21,10 @@ else:
 
 driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
 
+
+transcript = "NO"
+reason = ""
+
 LastName = "Column E"
 ID = int("Column F")
 Grade = int("Column G")
@@ -28,6 +32,16 @@ Grade = int("Column G")
 TranscriptLastName = "Michaud"
 
 stringNumID = "Student Number: 166762 Grade: 12"
-TranscriptID = int(string.split(" ")[2])
-TranscriptGrade = int(string.split(" ")[4])
+TranscriptID = int(stringNumID.split(" ")[2])
+TranscriptGrade = int(stringNumID.split(" ")[4])
 
+if LastName == TranscriptLastName:
+    if TranscriptID == ID:
+        if TranscriptGrade == Grade:
+            transcript = "YES"
+        else:
+            reason = "Grade does not match"
+    else:
+        reason = "ID does not match"
+else:
+    reason = "Name does not match"
