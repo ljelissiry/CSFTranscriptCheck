@@ -44,13 +44,13 @@ for i in range(rnge):
 transcript = "NO"
 reason = ""
 
-LastName = "Column E"
-ID = int("Column F")
-Grade = int("Column G")
+SheetsLastName = "Column E"
+SheetsID = int("Column F")
+SheetsGrade = int("Column G")
 
 TranscriptLastName = "Michaud"
 
-stringNumID = "Student Number: 166762 Grade: 12"
+TranscriptStringNumID = "Student Number: 166762 Grade: 12"
 TranscriptID = int(stringNumID.split(" ")[2])
 TranscriptGrade = int(stringNumID.split(" ")[4])
 
