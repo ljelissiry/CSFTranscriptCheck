@@ -74,7 +74,7 @@ for i in range(rnge):
         actions.send_keys(Keys.ARROW_RIGHT)
         actions.perform()
     elem = driver.find_element_by_class_name('cell-input')
-    SheetsLastName = elem.get_attribute('innerText')
+    SheetsLastName = elem.get_attribute('innerText')[:-1]
     actions = ActionChains(driver)
     actions.send_keys(Keys.ARROW_RIGHT)
     actions.perform()
@@ -102,8 +102,7 @@ for i in range(rnge):
         text = elem[i]
         TranscriptText.append(text.get_attribute('innerText'))
     print(TranscriptText)
-    TranscriptLastName = elem.get_attribute('innerText').split(",")[0]
-    print(TranscriptLastName)
+    TranscriptLastName = TranscriptText[-5].split(",")[0]
 
     elem = TranscriptText[1]
     TranscriptID = int(elem.split(" ")[2])
@@ -119,3 +118,16 @@ for i in range(rnge):
             reason = "ID does not match"
     else:
         reason = "Name does not match"
+
+    if transcript == "YES":
+        start = 0
+        end = 0
+        for i in range(len(TranscriptText)):
+            if "2016-2017" in TranscriptText[i]:
+                start = i
+            if "Credit: " in TranscriptText[i]:
+                end = i
+        CurrentGrades = " ".join(TranscriptText[start:end])
+        CurrentGrades = CurrentGrades.replace("+","").replace("-","")
+        Classes = CurrentGrades.split(" ")
+        print(CurrentGrades)
