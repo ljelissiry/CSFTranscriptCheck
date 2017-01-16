@@ -35,9 +35,6 @@ elem.send_keys(Keys.RETURN)
 startrow = int(input("What row do you want to start on?"))
 endrow = int(input("What row do you want to end on?"))
 rnge = endrow - startrow
-
-#String text = driver.findElement(By.id("some id")).getText()
-
 #Comparing Google Sheets Input with Transcript
 for i in range(rnge):
     scroll = startrow - 1 + i
@@ -69,18 +66,19 @@ for i in range(rnge):
     transcriptlink = elem.get_attribute('innerText')
     driver.get(transcriptlink)
 
-    transcript = "NO"
-    reason = ""
+       #Transcript
+    elem = driver.find_element_by_class_name('drive-viewer-paginated-page-reader-block')
+    TranscriptStringNumID = elem.get_attribute('innerText')
+    #TranscriptStringNumID = "Student Number: 166762 Grade: 12"
+    TranscriptID = int(TranscriptStringNumID.split(" ")[2])
+    TranscriptGrade = int(TranscriptStringNumID.split(" ")[4])
+    elem = driver.find_element_by_class_name('drive-viewer-paginated-page-reader-block')
+    TranscriptNameString = "Elissiry, Luke Jacques"
+    TranscriptLastname = TranscriptNameString.split(" ")[1]
 
-    TranscriptLastName = "Michaud"
-
-    TranscriptStringNumID = "Student Number: 166762 Grade: 12"
-    TranscriptID = int(stringNumID.split(" ")[2])
-    TranscriptGrade = int(stringNumID.split(" ")[4])
-
-    if LastName == TranscriptLastName:
-        if TranscriptID == ID:
-            if TranscriptGrade == Grade:
+    if SheetsLastName == TranscriptLastName:
+        if SheetsID == TranscriptID:
+            if SheetsGrade == TranscriptGrade:
                 transcript = "YES"
             else:
                 reason = "Grade does not match"
@@ -88,4 +86,3 @@ for i in range(rnge):
             reason = "ID does not match"
     else:
         reason = "Name does not match"
-
