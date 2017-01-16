@@ -43,28 +43,26 @@ for i in range(rnge):
     actions.perform()
     
         
+    transcript = "NO"
+    reason = ""
 
+    SheetsLastName = "Column E"
+    SheetsID = int("Column F")
+    SheetsGrade = int("Column G")
 
-transcript = "NO"
-reason = ""
+    TranscriptLastName = "Michaud"
 
-SheetsLastName = "Column E"
-SheetsID = int("Column F")
-SheetsGrade = int("Column G")
+    TranscriptStringNumID = "Student Number: 166762 Grade: 12"
+    TranscriptID = int(stringNumID.split(" ")[2])
+    TranscriptGrade = int(stringNumID.split(" ")[4])
 
-TranscriptLastName = "Michaud"
-
-TranscriptStringNumID = "Student Number: 166762 Grade: 12"
-TranscriptID = int(stringNumID.split(" ")[2])
-TranscriptGrade = int(stringNumID.split(" ")[4])
-
-if LastName == TranscriptLastName:
-    if TranscriptID == ID:
-        if TranscriptGrade == Grade:
-            transcript = "YES"
+    if LastName == TranscriptLastName:
+        if TranscriptID == ID:
+            if TranscriptGrade == Grade:
+                transcript = "YES"
+            else:
+                reason = "Grade does not match"
         else:
-            reason = "Grade does not match"
+            reason = "ID does not match"
     else:
-        reason = "ID does not match"
-else:
-    reason = "Name does not match"
+        reason = "Name does not match"
