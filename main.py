@@ -27,7 +27,7 @@ rnge = endrow - startrow
 #String text = driver.findElement(By.id("some id")).getText()
 
 for i in range(rnge):
-    scroll = startrow - 1
+    scroll = startrow - 1 + i
     for v in range(scroll):
         actions = ActionChains(driver)
         actions.send_keys(Keys.ARROW_DOWN)
