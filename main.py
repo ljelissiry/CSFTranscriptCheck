@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 
 nlocation = "/Users/nolanbonnie/Desktop/Python/chromedriver"
 elocation = ""
-llocation = "/Users/Luke/Downloads/chromedriver"
+llocation = "/Users/"+input("What USER")+"/Downloads/chromedriver"
 
 loc = input("Who is using the code? (if CSF, csf)")
 if loc == "nolan":
@@ -22,7 +22,7 @@ else:
     print("input not recognized")
 
 
-driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
+driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1772866043")
 if loc == "nolan":
 #Input Email--------------------------------------------------
     elem = driver.find_element_by_name('Email')
@@ -56,8 +56,21 @@ if loc == "csf":
     elem.send_keys("SRV2016CSF")#input("Enter CSF Google Password"))
     elem.send_keys(Keys.RETURN)
 
-startrow = int(input("What row do you want to start on?"))
-endrow = int(input("What row do you want to end on?"))
+#CSF Class Lists (6 digit code)
+List1 = "MACBCP ROESAP SSAGAP SCPCAP ENERW*"
+List1 = List1.split(" ")
+
+List2 = "VACSPP"
+List2 = List2.split(" ")
+
+List3 = ""
+List3 = List3.split(" ")
+
+ClassList = List1 + List2 + List3
+
+
+startrow = int(input("First Row:"))
+endrow = int(input("Last Row: "))
 rnge = endrow - startrow
 
 #String text = driver.findElement(By.id("some id")).get_attribute("attribute")
@@ -101,7 +114,6 @@ for i in range(rnge):
     for i in range(len(elem)):
         text = elem[i]
         TranscriptText.append(text.get_attribute('innerText'))
-    print(TranscriptText)
     TranscriptLastName = TranscriptText[-5].split(",")[0]
 
     elem = TranscriptText[1]
@@ -119,30 +131,117 @@ for i in range(rnge):
     else:
         reason = "Name does not match"
 
+# locates classes and grades for most recent term from TranscriptText and stores in Classes
     if transcript == "YES":
         start = 0
         end = 0
         for i in range(len(TranscriptText)):
             if "2016-2017" in TranscriptText[i]:
-                start = i
+                start = i + 1
             if "Credit: " in TranscriptText[i]:
                 end = i
-        CurrentGrades = " ".join(TranscriptText[start:end])
-        CurrentGrades = CurrentGrades.replace("+","").replace("-","")
-        Classes = CurrentGrades.split(" ")
-        ClassList = ['MACBCP'] #Luke, input all codes here
-        print(CurrentGrades)
-        for x in range(len(Classes)):
-            if len(Classes[x]) == 6:
-                for i in range(len(ClassList)):
-                    if ClassList[i] == Classes[x]:
-                        print(ClassList[i], Classes[x], "Match")
-                        for z in range(len(Classes)):
-                            if Classes[z] == "5.0000" or Classes[z] == "4.0000" or Classes[z] == "3.0000" or Classes[z] == "2.0000" or Classes[z] == "1.0000":
-                                Grade = Classes[z - 1]
-                                print(Grade)
-                    else:
-                        print("invalid")
+        CurrentTerm = " ".join(TranscriptText[start:end])
+        CurrentTerm = CurrentTerm.replace("+","").replace("-","")
+        CurrentTerm = CurrentTerm.split(" ")
+        Classes = []
+        for i in range(len(CurrentTerm)):
+            if CurrentTerm[i] in ClassList:
+                Classes.append(CurrentTerm[i])
+                n = 0
+                while n >= 0:
+                    n += 1
+                    if "." in CurrentTerm[i+n]:
+                        Grade = CurrentTerm[i+n-1]
+                        if Grade == "A":
+                            Grade = 3
+                        elif Grade == "B":
+                            Grade = 1
+                        elif Grade == "C":
+                            Grade = 0
+                        else:
+                            Grade = -1
+                            transcript = "NO"
+                            reason = "D or F in a course"
+                        Classes.append(Grade)
+                        n = -1
+    if transcript == "YES":
+        NumAPH = 0
+        for List in [List1,List2,List3]:
+            for Grade in range(4,0,-1):
+                for Class in range(0,len(Classes),2):
+                    if NumAPH < 2 and Classes[Class] in List and Classes[Class + 1] == Grade and \
+                        (Classes[Class][5] == "P" or Classes[Class][5] == "H"):
+                        Classes[Class + 1] = Classes[Class + 1] + 1
+                        NumAPH += 1
+        ClassesLeft = Classes[:]
+        NumClasses = 0
+        NumPoints = 0
         
-                        
+    if transcript == "YES":
+        NumClassesbyList = 0
+        for Grade in range(4,-1,-1):
+            for Class in range(len(ClassesLeft)-2,-1,-2):
+                if ClassesLeft[Class] in List1 and \
+                   ClassesLeft[Class + 1] == Grade and \
+                   NumClassesbyList < 2 and NumClasses < 5:
+                    NumClasses += 1
+                    NumPoints += ClassesLeft[Class + 1]
+                    NumClassesbyList += 1
+                    del ClassesLeft[Class + 1]
+                    del ClassesLeft[Class]
+        if NumClasses < 2:
+            transcript = "NO"
+            reason = "< 2 List I courses"
+        if NumPoints < 4:
+            transcript = "NO"
+            reason = "< 4 points from List I"
 
+    if transcript == "YES":
+        NumClassesbyList = 0
+        for Grade in range(4,-1,-1):
+            for Class in range(len(ClassesLeft)-2,-1,-2):
+                if (ClassesLeft[Class] in List1 or ClassesLeft[Class] in List2) and \
+                   ClassesLeft[Class + 1] == Grade and \
+                   NumClassesbyList < 1 and NumClasses < 5:
+                    NumClasses += 1
+                    NumPoints += ClassesLeft[Class + 1]
+                    NumClassesbyList += 1
+                    del ClassesLeft[Class + 1]
+                    del ClassesLeft[Class]
+        if NumClasses < 3:
+            transcript = "NO"
+            reason = "< 3 List I & II courses"
+        if NumPoints < 7:
+            transcript = "NO"
+            reason = "< 7 points from List I & II"
+
+    if transcript == "YES":
+        for Grade in range(4,-1,-1):
+            for Class in range(len(ClassesLeft)-2,-1,-2):
+                if ClassesLeft[Class] in ClassList and \
+                   ClassesLeft[Class + 1] == Grade and \
+                   NumClasses < 5:
+                    NumClasses += 1
+                    NumPoints += ClassesLeft[Class + 1]
+                    del ClassesLeft[Class + 1]
+                    del ClassesLeft[Class]
+        if NumPoints < 10:
+            transcript = "NO"
+            reason = "< 10 points from List I, II, & III"
+
+
+    driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1772866043")
+    time.sleep(.5)
+    for v in range(scroll):
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.ARROW_DOWN)
+        actions.perform()
+    for v in range(12):
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.ARROW_RIGHT)
+        actions.perform()
+    #elem = driver.find_element_by_class_name('cell-input')
+    #driver.execute_script("arguments[0].innerText = 'NO')", elem)
+
+    print(Classes)
+    print(transcript)
