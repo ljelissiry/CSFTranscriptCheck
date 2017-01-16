@@ -7,34 +7,61 @@ from selenium.webdriver.common.keys import Keys
 
 nlocation = "/Users/nolanbonnie/Desktop/Python/chromedriver"
 elocation = ""
-llocation = ""
+llocation = "/Users/Luke/Downloads/chromedriver"
 
-loc = input("Who is using the code?")
+loc = input("Who is using the code? (if CSF, csf)")
 if loc == "nolan":
     driver = webdriver.Chrome(nlocation)
 elif loc == "eric":
     driver = webdriver.Chrome(elocation)
 elif loc == "luke":
     driver = webdriver.Chrome(llocation)
+elif loc == "csf":
+    driver = webdriver.Chrome(llocation)#input("Enter path of the chromedriver: "))
 else:
     print("input not recognized")
-    
-driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
 
+
+driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1082589385")
+if loc == "nolan":
 #Input Email--------------------------------------------------
-email = input("Email:   ")
-elem = driver.find_element_by_name('Email')
-elem.send_keys(email)
-elem.send_keys(Keys.RETURN)
+    elem = driver.find_element_by_name('Email')
+    elem.send_keys('nrbmee@gmail.com')
+    elem.send_keys(Keys.RETURN)
 #Input Password--------------------------------------------------
-passw = input("Password:    ")
-elem = driver.find_element_by_name('Passwd')
-elem.send_keys(passw)
-elem.send_keys(Keys.RETURN)
+    time.sleep(.5)
+    elem = driver.find_element_by_name('Passwd')
+    elem.send_keys("chase5135")
+    elem.send_keys(Keys.RETURN)
+
+if loc == "luke":
+#Input Email--------------------------------------------------
+    elem = driver.find_element_by_name('Email')
+    elem.send_keys('ljelissiry')
+    elem.send_keys(Keys.RETURN)
+#Input Password--------------------------------------------------
+    time.sleep(.2)
+    elem = driver.find_element_by_name('Passwd')
+    elem.send_keys("lj2gmail16")
+    elem.send_keys(Keys.RETURN)
+
+if loc == "csf":
+    #Input Email--------------------------------------------------
+    elem = driver.find_element_by_name('Email')
+    elem.send_keys('srv.csf')
+    elem.send_keys(Keys.RETURN)
+#Input Password--------------------------------------------------
+    time.sleep(.5)
+    elem = driver.find_element_by_name('Passwd')
+    elem.send_keys("SRV2016CSF")#input("Enter CSF Google Password"))
+    elem.send_keys(Keys.RETURN)
 
 startrow = int(input("What row do you want to start on?"))
 endrow = int(input("What row do you want to end on?"))
 rnge = endrow - startrow
+
+#String text = driver.findElement(By.id("some id")).get_attribute("attribute")
+
 #Comparing Google Sheets Input with Transcript
 for i in range(rnge):
     scroll = startrow - 1 + i
@@ -66,19 +93,25 @@ for i in range(rnge):
     transcriptlink = elem.get_attribute('innerText')
     driver.get(transcriptlink)
 
-       #Transcript
-    elem = driver.find_element_by_class_name('drive-viewer-paginated-page-reader-block')
-    TranscriptStringNumID = elem.get_attribute('innerText')
-    #TranscriptStringNumID = "Student Number: 166762 Grade: 12"
-    TranscriptID = int(TranscriptStringNumID.split(" ")[2])
-    TranscriptGrade = int(TranscriptStringNumID.split(" ")[4])
-    elem = driver.find_element_by_class_name('drive-viewer-paginated-page-reader-block')
-    TranscriptNameString = "Elissiry, Luke Jacques"
-    TranscriptLastname = TranscriptNameString.split(" ")[1]
+    transcript = "NO"
+    reason = ""
 
-    if SheetsLastName == TranscriptLastName:
-        if SheetsID == TranscriptID:
-            if SheetsGrade == TranscriptGrade:
+    elem = driver.find_elements_by_class_name('drive-viewer-paginated-page-reader-block')
+    TranscriptText = []
+    for i in range(len(elem)):
+        text = elem[i]
+        TranscriptText.append(text.get_attribute('innerText'))
+    print(TranscriptText)
+    TranscriptLastName = elem.get_attribute('innerText').split(",")[0]
+    print(TranscriptLastName)
+
+    elem = TranscriptText[1]
+    TranscriptID = int(elem.split(" ")[2])
+    TranscriptGrade = int(elem.split(" ")[4])
+
+    if TranscriptLastName == SheetsLastName:
+        if TranscriptID == SheetsID:
+            if TranscriptGrade == SheetsGrade:
                 transcript = "YES"
             else:
                 reason = "Grade does not match"
