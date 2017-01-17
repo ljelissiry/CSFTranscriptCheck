@@ -5,33 +5,17 @@ from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
-nlocation = "/Users/nolanbonnie/Desktop/Python/chromedriver"
-
-loc = input("Who is using the code? (if CSF, csf)")
-if loc == "nolan":
-    driver = webdriver.Chrome(nlocation)
-elif loc == "eric":
-    driver = webdriver.Chrome(elocation)
-elif loc == "csf":
-    driver = webdriver.Chrome("/Users/"+input("What USER")+"/Downloads/chromedriver")#input("Enter path of the chromedriver: "))
+account = input("Google Account (if CSF, srv.csf): ")
+if account == "srv.csf":
+    driver = webdriver.Chrome("/Users/"+input("USER: ")+"/Downloads/chromedriver")
 else:
-    print("input not recognized")
+    password = input("Enter Google Account Password: ")
+    driver = webdriver.Chrome(input("Enter path of the chromedriver: "))
 
 driver.get("https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1772866043")
-if loc == "nolan":
-#Input Email--------------------------------------------------
-    elem = driver.find_element_by_name('Email')
-    elem.send_keys('nrbmee@gmail.com')
-    elem.send_keys(Keys.RETURN)
-#Input Password--------------------------------------------------
-    time.sleep(.5)
-    elem = driver.find_element_by_name('Passwd')
-    passwordnolan = input("Password for nrbmee@gmail.com")
-    elem.send_keys(passwordnolan)
-    elem.send_keys(Keys.RETURN)
 
-if loc == "csf":
-    #Input Email--------------------------------------------------
+if account == "srv.csf":
+#Input Email--------------------------------------------------
     elem = driver.find_element_by_name('Email')
     elem.send_keys('srv.csf')
     elem.send_keys(Keys.RETURN)
@@ -39,6 +23,16 @@ if loc == "csf":
     time.sleep(.5)
     elem = driver.find_element_by_name('Passwd')
     elem.send_keys("SRV2016CSF")#input("Enter CSF Google Password: "))
+    elem.send_keys(Keys.RETURN)
+else:
+#Input Email--------------------------------------------------
+    elem = driver.find_element_by_name('Email')
+    elem.send_keys(account)
+    elem.send_keys(Keys.RETURN)
+#Input Password--------------------------------------------------
+    time.sleep(.5)
+    elem = driver.find_element_by_name('Passwd')
+    elem.send_keys(password)
     elem.send_keys(Keys.RETURN)
 
 #CSF Class Lists (6 digit code obtained from course catalogs)
@@ -116,12 +110,20 @@ for r in range(rnge):
     actions.send_keys(Keys.ARROW_RIGHT)
     actions.perform()
     elem = driver.find_element_by_class_name('cell-input')
-    SheetsID = int(elem.get_attribute('innerText'))
+    SheetsID = elem.get_attribute('innerText')
+    try:
+        SheetsID = int(SheetsID)
+    except ValueError:
+        SheetsID = 0
     actions = ActionChains(driver)
     actions.send_keys(Keys.ARROW_RIGHT)
     actions.perform()
     elem = driver.find_element_by_class_name('cell-input')
-    SheetsGrade = int(elem.get_attribute('innerText'))
+    SheetsGrade = elem.get_attribute('innerText')
+    try:
+        SheetsGrade = int(SheetsGrade)
+    except ValueError:
+        SheetsGrade = 0
     for v in range(5):
         actions = ActionChains(driver)
         actions.send_keys(Keys.ARROW_RIGHT)
@@ -161,6 +163,9 @@ for r in range(rnge):
             reason = "Name does not match"
     else:
         reason = "Transcript link is broken"
+    if SheetsFirstName + SheetsLastName == "":
+        transcript = ""
+        reason = ""
 
 # locates classes and grades for most recent term from TranscriptText and stores in Classes
     if transcript == "YES":
