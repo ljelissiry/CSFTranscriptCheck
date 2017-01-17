@@ -1,4 +1,4 @@
-import time
+rt time
 import string
 import random
 from selenium import webdriver
@@ -55,17 +55,49 @@ if loc == "csf":
     elem.send_keys("SRV2016CSF")#input("Enter CSF Google Password"))
     elem.send_keys(Keys.RETURN)
 
-#CSF Class Lists (6 digit code)
-List1 = "MACBCP ROESAP SSAGAP SCPCAP ENERW*"
+#CSF Class Lists (6 digit code obtained from course catalogs)
+#appear in order of classes HERE: https://goo.gl/hQ8Jtg
+    
+EnglishClasses = "ENE09* ENE10* ENE10U ENE11* ENLCAP ENE12* ENERW* ENELAP"
+LanguageClasses = "FLF1** FLF2** FLF3** FLF4*H FLFLAP FLS1** FLS2** FLS3** FLS4*H FLSLAP"
+MathClasses = "MAA1** MAG*** MAA2** MATMA* MATMAH MAC*** MACABP MACBCP MAS*** MAAMT*"
+ScienceClasses = "SCAP** SCAP*H SCB*** SCAB** SCB*AP SCC** SCC**H SCC*AP ROESAP SCMB** SCP*** SCP**H SCPCAP"
+SocialScienceClasses = "SSAG** SSAGP* SSAGAP SSE*** SSEMIP SSEMAP SSEHAP SSUS** SSUSAP SSWH**"
+
+List1 = EnglishClasses + " " + LanguageClasses + " " + MathClasses + " " + \
+        ScienceClasses + " " + SocialScienceClasses
 List1 = List1.split(" ")
 
-List2 = "VACSPP"
+EnglishClasses = "NDCW*N NDJ1** NDJ2** NDSD**"
+MathClasses = "MAAE1* MAAE2*"
+ScienceClasses = "SCLS*N SCIPS*"
+SocialScienceClasses = "SSCH** SSHWA* SSHGAP SSL*** SSP*** SSP*AP SSVE** SSWG** SSWW2**"
+MusicClasses = "FAMTAP"
+ComputerClasses = "VAC1*N VAC2** VAC*AP VACSPP VACPL*"
+
+List2 = EnglishClasses + " " + LanguageClasses + " " + MathClasses + " " + \
+        ScienceClasses + " " + SocialScienceClasses + " " + \
+        MusicClasses + " " + ComputerClasses
 List2 = List2.split(" ")
 
-List3 = ""
+IndustrialArts = "ROAF*N VAAU1N VAAU2N ROAUTN VABBRN"
+HomeEconomics = "VACA1N VACA2N"
+PerformingArts = "FAD1** FAD2** FAD3** FAD4** FAD5** FATA1* FATA2* FATA3* FATA4* FATP** FAOI**"
+Business = "VAIBE* MAPF*N"
+VisualArts = "FA3D1* FA3D2* FA3D3N FAA1** FAA2** FAA5** ROCGA* ROWEB* FAP*** FAPA** FASAAP FAAV1* FAAV2*"
+VocalMusic = "FACS** FACC** FAME** FATC** FAWE**"
+InstrumentalMusic = "FACB** FAJB** FAJE** FAMB*N FAO*** FASB**"
+Other = "NDAVID NDASS* NDH**N Leadership NDPUB NDAP** VAWX*N VAWXZN"
+ROP = "ROIE** ROCITN ROCT2* ROSM** ROSMAN"
+
+List3 = IndustrialArts + " " + HomeEconomics + " " + PerformingArts + " " + \
+        Business + " " + VisualArts + " " + VocalMusic + " " + \
+        InstrumentalMusic + " " + Other + " " + ROP
 List3 = List3.split(" ")
 
 ClassList = List1 + List2 + List3
+
+
 
 startrow = int(input("First Row: "))
 endrow = int(input("Last Row: "))
