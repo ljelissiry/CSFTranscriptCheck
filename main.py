@@ -1,4 +1,4 @@
-rt time
+import time
 import string
 import random
 from selenium import webdriver
@@ -145,7 +145,7 @@ for r in range(rnge):
 
     driver.execute_script("window.open('" + transcriptlink + "', 'new_window')")
     driver.switch_to_window(driver.window_handles[1])
-    time.sleep(1)
+    time.sleep(.5)
     
     transcript = "NO"
     Classes = []
@@ -306,9 +306,12 @@ for r in range(rnge):
         actions.perform()
 
     print("\n","Row: ",startrow + r,sep="")
-    print(SheetsFirstName,SheetsLastName)
-    if Classes != []:
-        print(Classes)
-    print("Transcript:",transcript)
-    if reason != "":
-        print("Reason:",reason)
+    if SheetsFirstName + SheetsLastName == "":
+        print("NO PERSON!")
+    else:
+        print(SheetsFirstName,SheetsLastName)
+        if Classes != []:
+            print(Classes)
+        print("Transcript:",transcript)
+        if reason != "":
+            print("Reason:",reason)
