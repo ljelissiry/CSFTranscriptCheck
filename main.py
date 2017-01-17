@@ -6,18 +6,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
 nlocation = "/Users/nolanbonnie/Desktop/Python/chromedriver"
-elocation = ""
-llocation = "/Users/"+input("What USER")+"/Downloads/chromedriver"
 
 loc = input("Who is using the code? (if CSF, csf)")
 if loc == "nolan":
     driver = webdriver.Chrome(nlocation)
 elif loc == "eric":
     driver = webdriver.Chrome(elocation)
-elif loc == "luke":
-    driver = webdriver.Chrome(llocation)
 elif loc == "csf":
-    driver = webdriver.Chrome(llocation)#input("Enter path of the chromedriver: "))
+    driver = webdriver.Chrome("/Users/"+input("What USER")+"/Downloads/chromedriver")#input("Enter path of the chromedriver: "))
 else:
     print("input not recognized")
 
@@ -33,17 +29,6 @@ if loc == "nolan":
     elem.send_keys("chase5135")
     elem.send_keys(Keys.RETURN)
 
-if loc == "luke":
-#Input Email--------------------------------------------------
-    elem = driver.find_element_by_name('Email')
-    elem.send_keys('ljelissiry')
-    elem.send_keys(Keys.RETURN)
-#Input Password--------------------------------------------------
-    time.sleep(.2)
-    elem = driver.find_element_by_name('Passwd')
-    elem.send_keys("lj2gmail16")
-    elem.send_keys(Keys.RETURN)
-
 if loc == "csf":
     #Input Email--------------------------------------------------
     elem = driver.find_element_by_name('Email')
@@ -52,7 +37,7 @@ if loc == "csf":
 #Input Password--------------------------------------------------
     time.sleep(.5)
     elem = driver.find_element_by_name('Passwd')
-    elem.send_keys("SRV2016CSF")#input("Enter CSF Google Password"))
+    elem.send_keys("SRV2016CSF")#input("Enter CSF Google Password: "))
     elem.send_keys(Keys.RETURN)
 
 #CSF Class Lists (6 digit code obtained from course catalogs)
