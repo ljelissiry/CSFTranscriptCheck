@@ -26,7 +26,8 @@ if loc == "nolan":
 #Input Password--------------------------------------------------
     time.sleep(.5)
     elem = driver.find_element_by_name('Passwd')
-    elem.send_keys("chase5135")
+    passwordnolan = input("Password for nrbmee@gmail.com")
+    elem.send_keys(passwordnolan)
     elem.send_keys(Keys.RETURN)
 
 if loc == "csf":
