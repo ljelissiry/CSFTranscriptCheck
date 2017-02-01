@@ -15,13 +15,13 @@ SchoolYear = "2016-2017"
 TermNum = "1"
 # Term number of grades to check
 
-if input("Real (r) or Fake (f) transcript? ") == "r":
-    GoogleSheet = "https://docs.google.com/spreadsheets/d/1T8HZYhpwB0LCP9Asbqa9mZ_YDAxuqARJ9yysrGrVi2I/edit#gid=167389222"
-else:
-    GoogleSheet = "https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1772866043"
+#if input("Real (r) or Fake (f) transcript? ") == "r":
+GoogleSheet = "https://docs.google.com/spreadsheets/d/1T8HZYhpwB0LCP9Asbqa9mZ_YDAxuqARJ9yysrGrVi2I/edit#gid=167389222"
+#else:
+    #GoogleSheet = "https://docs.google.com/spreadsheets/d/1ch5pT5ywKXvINhlhDJzvdl0YgxRjSdHKPzIf-ht5qgw/edit#gid=1772866043"
 # Link of Google Sheet
 
-SleepTime = 1
+SleepTime = 1.75
 # Time it gives to open transcript
 
 
@@ -146,6 +146,24 @@ for r in range(rnge):
 # First Name
     elem = driver.find_element_by_class_name('cell-input')
     SheetsFirstName = elem.get_attribute('innerText')[:-1]
+    #Remove all leading & trailing spaces
+    if SheetsFirstName[0] == ' ' or SheetsFirstName[-1] == ' ':
+        while SheetsFirstName[0] == ' ':
+            SheetsFirstName = SheetsFirstName[1:]
+        while SheetsFirstName[-1] == ' ':
+            SheetsFirstName = SheetsFirstName[:-1]
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.DELETE,Keys.ENTER)
+        actions.perform()
+        actions = ActionChains(driver)
+        actions.send_keys(SheetsFirstName)
+        actions.perform()
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.TAB)
+        actions.perform()
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.ARROW_LEFT)
+        actions.perform()
     actions = ActionChains(driver)
     actions.send_keys(Keys.ARROW_RIGHT)
     actions.perform()
@@ -153,6 +171,24 @@ for r in range(rnge):
 # Last Name
     elem = driver.find_element_by_class_name('cell-input')
     SheetsLastName = elem.get_attribute('innerText')[:-1]
+    #Remove all leading & trailing spaces
+    if SheetsLastName[0] == ' ' or SheetsLastName[-1] == ' ':
+        while SheetsLastName[0] == ' ':
+            SheetsLastName = SheetsLastName[1:]
+        while SheetsLastName[-1] == ' ':
+            SheetsLastName = SheetsLastName[:-1]
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.DELETE,Keys.ENTER)
+        actions.perform()
+        actions = ActionChains(driver)
+        actions.send_keys(SheetsLastName)
+        actions.perform()
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.TAB)
+        actions.perform()
+        actions = ActionChains(driver)
+        actions.send_keys(Keys.ARROW_LEFT)
+        actions.perform()
     actions = ActionChains(driver)
     actions.send_keys(Keys.ARROW_RIGHT)
     actions.perform()
@@ -207,6 +243,12 @@ for r in range(rnge):
     elif "*" in SheetsReason:
         transcript = ""
         reason = ""
+
+# If link is a computer file path, mark as incorrect
+    elif """file:///""" in transcriptlink:
+        print('Yup')
+        transcript = "NO"
+        reason = "Incorrect Link Format"
 
 # If it does have data, open link
     else:
@@ -324,6 +366,8 @@ for r in range(rnge):
                 Grade = 1
             elif Grade == "C":
                 Grade = 0
+            elif Grade == "P":
+                Grade = 0
             else:
                 Grade = -1
                 transcript = "NO"
@@ -408,8 +452,9 @@ for r in range(rnge):
 
 
     if transcript != "":
-        driver.close()
-        driver.switch_to_window(driver.window_handles[0])
+        if reason != "Incorrect Link Format":
+            driver.close()
+            driver.switch_to_window(driver.window_handles[0])
 
         if SheetsReason != "Requested Access" or Classes != []:
             actions = ActionChains(driver)
@@ -460,7 +505,7 @@ for r in range(rnge):
     else:
         print(SheetsFirstName,SheetsLastName)
         if "*" not in SheetsReason:
-            if Classes != []:
+            if Classes != [] and reason != "Incorrect Link Format":
                 print(Classes)
             print("Transcript:",transcript)
         else:
